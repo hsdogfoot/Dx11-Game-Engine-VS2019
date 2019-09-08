@@ -1,0 +1,19 @@
+1. Input Manager 만들기
+2. Camera Manager 만들기
+
+떠기한테 넘기기 (떠기가 피킹 만들어준당 히히)
+
+3. Scene Manager 만들기
+4. Time Manager 만들기
+5. Sound Manager 만들기
+6. Picking Manager 만들기
+7. 텍스처 애니메이션 기능 만들기
+8. 셰이더 상수 버퍼 관련 기능 만들기
+9. c# 에 연결 시키기
+10. txt 파일로부터 객체 생생해보기
+
+-------------------------------------
+
+cameracomponent 내용 추가
+componentfactory 수정
+	- default component 들은 initialize 에서, 나머지는 source.cpp 에서 임의로 코드 붙여넣기로 해결?
