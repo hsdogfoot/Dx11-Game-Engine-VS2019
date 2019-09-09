@@ -27,7 +27,8 @@ uint8_t TestComponent::Update()
 	if (mbToggle)
 	{
 		mData.red += 0.01f;
-		mData.green -= 0.01f;
+		mData.green += 0.01f;
+		mData.blue += 0.01f;
 
 		if (mData.red > 1.0f)
 		{
@@ -38,6 +39,7 @@ uint8_t TestComponent::Update()
 	{
 		mData.red -= 0.01f;
 		mData.green -= 0.01f;
+		mData.blue -= 0.01f;
 
 		if (mData.red < 0.0f)
 		{

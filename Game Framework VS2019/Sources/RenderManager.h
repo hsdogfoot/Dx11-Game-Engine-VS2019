@@ -19,8 +19,9 @@ private:
 
 	virtual void destroy() override;
 
+public:
+	std::vector<Actor*> Actors;
+
 private:
 	static RenderManager* mInstance;
-
-	std::vector<Actor*> mActors;
 };

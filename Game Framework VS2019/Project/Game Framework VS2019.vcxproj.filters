@@ -151,6 +151,12 @@
     <Filter Include="Game\Component\Custom Components">
       <UniqueIdentifier>{b3f0ea24-dc80-4270-add1-08d5943b8742}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\Resource\Default Resources\Texture\Test">
+      <UniqueIdentifier>{cd145db9-5b96-4a5c-be90-e3dd302655af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Manager\PickingManager">
+      <UniqueIdentifier>{b1297e3e-8e19-4643-9d06-48f20c64877e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Sources\Source.cpp">
@@ -245,6 +251,9 @@
     </ClCompile>
     <ClCompile Include="..\Sources\TestComponent.cpp">
       <Filter>Game\Component\Custom Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Sources\PickingManager.cpp">
+      <Filter>Game\Manager\PickingManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -367,6 +376,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\TestComponent.h">
       <Filter>Game\Component\Custom Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\PickingManager.h">
+      <Filter>Game\Manager\PickingManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

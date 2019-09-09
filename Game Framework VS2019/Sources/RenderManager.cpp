@@ -35,19 +35,19 @@ void RenderManager::RegisterActor(Actor* actor)
 {
 	Assert(actor != nullptr);
 
-	mActors.push_back(actor);
+	Actors.push_back(actor);
 	actor->AddRefCount();
 }
 
 void RenderManager::Render()
 {
-	for (auto actor : mActors)
+	for (auto actor : Actors)
 	{
 		actor->Render();
 		actor->Release();
 	}
 
-	mActors.clear();
+	Actors.clear();
 }
 
 RenderManager::RenderManager()
@@ -57,7 +57,7 @@ RenderManager::RenderManager()
 
 void RenderManager::destroy()
 {
-	for (auto actor : mActors)
+	for (auto actor : Actors)
 	{
 		actor->Release();
 	}

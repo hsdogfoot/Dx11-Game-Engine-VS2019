@@ -58,7 +58,7 @@ void TPixelShader<Type>::ReadyRender()
 
 	CBuffer->ApplyChanges();
 
-	mDeviceContext->PSSetConstantBuffers(0, 1, &CBuffer->Buffer);
+	mDeviceContext->PSSetConstantBuffers(1, 1, &CBuffer->Buffer);
 }
 
 template<typename Type>

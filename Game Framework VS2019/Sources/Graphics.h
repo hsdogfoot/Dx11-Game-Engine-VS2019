@@ -31,4 +31,5 @@ private:
 
 	ID3D11RasterizerState* mRasterizerState;
 	ID3D11SamplerState* mSamplerState;
+	ID3D11BlendState* mBlendState;
 };

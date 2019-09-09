@@ -45,6 +45,7 @@ Graphics::Graphics()
 	, mDepthStencilState(nullptr)
 	, mRasterizerState(nullptr)
 	, mSamplerState(nullptr)
+	, mBlendState(nullptr)
 {
 }
 
@@ -221,6 +222,22 @@ bool Graphics::initializeDirectX(HWND hWND, int width, int height)
 		return false;
 	}
 
+	D3D11_BLEND_DESC blendDesc;
+	ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+
+	//blendDesc.AlphaToCoverageEnable = FALSE;
+	//blendDesc.IndependentBlendEnable = FALSE;
+	//blendDesc.RenderTarget[0].
+
+
+	hResult = Device->CreateBlendState(&blendDesc, &mBlendState);
+	if (FAILED(hResult))
+	{
+		HRLog(hResult);
+
+		return false;
+	}
+
 	return true;
 }
 
@@ -238,6 +255,7 @@ void Graphics::destroy()
 
 	ReleaseCOM(mRasterizerState);
 	ReleaseCOM(mSamplerState);
+	ReleaseCOM(mBlendState);
 
 	for (auto adapterData : AdapterReader::GetAdapters())
 	{

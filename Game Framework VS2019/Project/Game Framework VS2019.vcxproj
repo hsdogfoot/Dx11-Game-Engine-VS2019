@@ -210,6 +210,7 @@ copy "$(OutDir)Resources\Textures\*.*" "$(ProjectDir)Resources\Textures"</Comman
     <ClCompile Include="..\Sources\Graphics.cpp" />
     <ClCompile Include="..\Sources\IndexBuffer.cpp" />
     <ClCompile Include="..\Sources\Input.cpp" />
+    <ClCompile Include="..\Sources\PickingManager.cpp" />
     <ClCompile Include="..\Sources\PixelShader.cpp" />
     <ClCompile Include="..\Sources\RectBuffer.cpp" />
     <ClCompile Include="..\Sources\Renderer.cpp" />
@@ -257,6 +258,7 @@ copy "$(OutDir)Resources\Textures\*.*" "$(ProjectDir)Resources\Textures"</Comman
     <ClInclude Include="..\Sources\Graphics.h" />
     <ClInclude Include="..\Sources\IndexBuffer.h" />
     <ClInclude Include="..\Sources\Input.h" />
+    <ClInclude Include="..\Sources\PickingManager.h" />
     <ClInclude Include="..\Sources\PixelShader.h" />
     <ClInclude Include="..\Sources\RectBuffer.h" />
     <ClInclude Include="..\Sources\Renderer.h" />

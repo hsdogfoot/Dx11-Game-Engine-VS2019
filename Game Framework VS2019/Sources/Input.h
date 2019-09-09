@@ -30,8 +30,8 @@ private:
 	Input();
 	virtual ~Input() override = default;
 
-	bool initializeKeyboard(HWND hWND);
-	bool initializeMouse(HWND hWND);
+	bool initializeKeyboard();
+	bool initializeMouse();
 
 	bool ReadKeyboard();
 	bool ReadMouse();
@@ -40,6 +40,8 @@ private:
 
 private:
 	static Input* mInstance;
+
+	HWND mWindowHandle;
 
 	IDirectInput8W* mDirectInput;
 
@@ -52,8 +54,7 @@ private:
 	DIMOUSESTATE mMouseState;
 	bool mCurrentMouseState[MOUSE_SIZE];
 	bool mPreviousMouseState[MOUSE_SIZE];
-	int mMouseX;
-	int mMouseY;
+	POINT mMousePos;
 
 	int mScreenWidth;
 	int mScreenHeight;
@@ -90,11 +91,11 @@ inline bool Input::IsMouseUp(eMouseKeyType key) const
 }
 
 inline int Input::GetMouseX() const
-{
-	return mMouseX;
+{	
+	return mMousePos.x;
 }
 
 inline int Input::GetMouseY() const
 {
-	return mMouseY;
+	return mMousePos.y;
 }

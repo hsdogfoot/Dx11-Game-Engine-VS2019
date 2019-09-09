@@ -34,6 +34,8 @@ bool Input::Initialize(HINSTANCE hInstance, HWND hWND, int screenWidth, int scre
 	Assert(hInstance != nullptr);
 	Assert(hWND != nullptr);
 
+	mWindowHandle = hWND;
+
 	mScreenWidth = screenWidth;
 	mScreenHeight = screenHeight;
 
@@ -45,12 +47,12 @@ bool Input::Initialize(HINSTANCE hInstance, HWND hWND, int screenWidth, int scre
 		return false;
 	}
 
-	if (!initializeKeyboard(hWND))
+	if (!initializeKeyboard())
 	{
 		return false;
 	}
 
-	if (!initializeMouse(hWND))
+	if (!initializeMouse())
 	{
 		return false;
 	}
@@ -94,6 +96,7 @@ void Input::Update()
 
 Input::Input()
 	: Base()
+	, mWindowHandle(nullptr)
 	, mDirectInput(nullptr)
 	, mKeyboard(nullptr)
 	, mKeyboardState()
@@ -103,14 +106,13 @@ Input::Input()
 	, mMouseState()
 	, mCurrentMouseState()
 	, mPreviousMouseState()
-	, mMouseX(0)
-	, mMouseY(0)
+	, mMousePos()
 	, mScreenWidth(0)
 	, mScreenHeight(0)
 {
 }
 
-bool Input::initializeKeyboard(HWND hWND)
+bool Input::initializeKeyboard()
 {
 	HRESULT hResult = mDirectInput->CreateDevice(GUID_SysKeyboard, &mKeyboard, nullptr);
 	if (FAILED(hResult))
@@ -128,7 +130,7 @@ bool Input::initializeKeyboard(HWND hWND)
 		return false;
 	}
 
-	hResult = mKeyboard->SetCooperativeLevel(hWND, DISCL_FOREGROUND | DISCL_EXCLUSIVE);
+	hResult = mKeyboard->SetCooperativeLevel(mWindowHandle, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if (FAILED(hResult))
 	{
 		HRLog(hResult);
@@ -147,7 +149,7 @@ bool Input::initializeKeyboard(HWND hWND)
 	return true;
 }
 
-bool Input::initializeMouse(HWND hWND)
+bool Input::initializeMouse()
 {
 	HRESULT hResult = mDirectInput->CreateDevice(GUID_SysMouse, &mMouse, nullptr);
 	if (FAILED(hResult))
@@ -165,7 +167,7 @@ bool Input::initializeMouse(HWND hWND)
 		return false;
 	}
 
-	hResult = mMouse->SetCooperativeLevel(hWND, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
+	hResult = mMouse->SetCooperativeLevel(mWindowHandle, DISCL_FOREGROUND | DISCL_NONEXCLUSIVE);
 	if (FAILED(hResult))
 	{
 		HRLog(hResult);
@@ -213,27 +215,27 @@ bool Input::ReadMouse()
 		return false;
 	}
 
-	mMouseX += mMouseState.lX;
-	mMouseY += mMouseState.lY;
+	GetCursorPos(&mMousePos);
+	ScreenToClient(mWindowHandle, &mMousePos);
 
-	if (mMouseX < 0)
+	if (mMousePos.x < 0)
 	{
-		mMouseX = 0;
+		mMousePos.x = 0;
 	}
 
-	if (mMouseY < 0)
+	if (mMousePos.y < 0)
 	{
-		mMouseY = 0;
+		mMousePos.y = 0;
 	}
 
-	if (mMouseX > mScreenWidth)
+	if (mMousePos.x > mScreenWidth)
 	{
-		mMouseX = mScreenWidth;
+		mMousePos.x = mScreenWidth;
 	}
 
-	if (mMouseY > mScreenHeight)
+	if (mMousePos.y > mScreenHeight)
 	{
-		mMouseY = mScreenHeight;
+		mMousePos.y = mScreenHeight;
 	}
 
 	return true;

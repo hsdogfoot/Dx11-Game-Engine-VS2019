@@ -77,6 +77,11 @@ void Engine::update()
 	{
 		CameraManager::GetInstance()->MainCamera->AdjustRotation(XMFLOAT3(0.0f, 0.01f, 0.0f));
 	}
+
+	if (Input::GetInstance()->IsMouseUp(Input::eMouseKeyType::Left))
+	{
+		PickingManager::GetInstance()->Pick();
+	}
 }
 
 void Engine::renderFrame()
@@ -132,6 +137,8 @@ bool Engine::initialize(HINSTANCE hInstance, std::string windowTitle, std::strin
 		return false;
 	}
 
+	PickingManager::GetInstance()->Initialize(mRenderWindow->Width, mRenderWindow->Height);
+
 	return true;
 }
 
@@ -155,7 +162,17 @@ bool Engine::loadResources() const
 
 	bool bResult = true;
 	bResult &= factory->RegisterPrototype(L"RectBuffer", RectBuffer::CreateOrNull(mGraphics->Device, mGraphics->DeviceContext));
-	bResult &= factory->RegisterPrototype(L"Texture_Test", Texture::CreateOrNull(mGraphics->Device, mGraphics->DeviceContext, L"Resources\\Textures\\niniz.png"));
+	
+	Texture::TextureDesc textureDesc;
+	ZeroMemory(&textureDesc, sizeof(Texture::TextureDesc));
+
+	textureDesc.IsAnimation = true;
+	textureDesc.TotalCount = 4;
+	textureDesc.ColumnCount = 4;
+	textureDesc.RowCount = 2;
+
+	bResult &= factory->RegisterPrototype(L"Texture_Test", Texture::CreateOrNull(mGraphics->Device, mGraphics->DeviceContext, L"Resources\\Textures\\niniz.png", &textureDesc));
+	bResult &= factory->RegisterPrototype(L"Texture_Slime", Texture::CreateOrNull(mGraphics->Device, mGraphics->DeviceContext, L"Resources\\Textures\\slime_green.png", &textureDesc));
 	bResult &= factory->RegisterPrototype(L"VS_Test", TVertexShader<CB_VS_WVP>::CreateOrNull(mGraphics->Device, mGraphics->DeviceContext, L"Resources\\Shaders\\VertexShader.cso"));
 	bResult &= factory->RegisterPrototype(L"PS_Test", TPixelShader<CB_PS_EMPTY>::CreateOrNull(mGraphics->Device, mGraphics->DeviceContext, L"Resources\\Shaders\\PixelShader.cso"));
 	bResult &= factory->RegisterPrototype(L"PS_Test_Color", TPixelShader<CB_PS_COLOR>::CreateOrNull(mGraphics->Device, mGraphics->DeviceContext, L"Resources\\Shaders\\PixelShader.cso"));
@@ -166,8 +183,8 @@ bool Engine::loadResources() const
 bool Engine::loadActors() const
 {
 	Actor* actor = Actor::Create();
-	actor->EquipComponent<Transform>(L"Transform", L"Transform", XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f), XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f));
-	actor->EquipComponent<Renderer2D>(L"Renderer", L"Renderer2D", mGraphics->Device, mGraphics->DeviceContext, L"Texture_Test", L"VS_Test", L"PS_Test_Color");
+	actor->EquipComponent<Transform>(L"Transform", L"Transform", XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f), XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f), XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f));
+	actor->EquipComponent<Renderer2D>(L"Renderer", L"Renderer2D", mGraphics->Device, mGraphics->DeviceContext, L"Texture_Slime", L"VS_Test", L"PS_Test_Color");
 	actor->EquipComponent<TestComponent>(L"Test", L"Test");
 	ActorManager::GetInstance()->RegisterActor(actor);
 
@@ -177,8 +194,8 @@ bool Engine::loadActors() const
 bool Engine::loadCameras() const
 {
 	Camera* camera = Camera::Create();
-	camera->EquipComponent<CameraComponent>(L"CameraComponent", L"CameraComponent", CameraComponent::eProjectionType::Orthographic, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XM_PI / 4.0f, 4.0f, 3.0f, 0.1f, 1000.0f);
-	//camera->EquipComponent<CameraComponent>(L"CameraComponent", L"CameraComponent", CameraComponent::eProjectionType::Perspective, XMFLOAT3(0.0f, 0.0f, -10.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XM_PI / 4.0f, static_cast<float>(mRenderWindow->Width), static_cast<float>(mRenderWindow->Height), 0.1f, 1000.0f);
+	//camera->EquipComponent<CameraComponent>(L"CameraComponent", L"CameraComponent", CameraComponent::eProjectionType::Orthographic, XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XM_PI / 4.0f, 4.0f, 3.0f, 0.1f, 1000.0f);
+	camera->EquipComponent<CameraComponent>(L"CameraComponent", L"CameraComponent", CameraComponent::eProjectionType::Perspective, XMFLOAT3(0.0f, 0.0f, -10.0f), XMFLOAT3(0.0f, 0.0f, 0.0f), XM_PI / 4.0f, static_cast<float>(mRenderWindow->Width), static_cast<float>(mRenderWindow->Height), 0.1f, 1000.0f);
 	CameraManager::GetInstance()->RegisterCamera(L"MainCamera", camera);
 	CameraManager::GetInstance()->SetMainCamera(L"MainCamera");
 
@@ -188,6 +205,7 @@ bool Engine::loadCameras() const
 void Engine::destroy()
 {
 	Input::GetInstance()->DestroyInstance();
+	PickingManager::GetInstance()->DestroyInstance();
 	RenderManager::GetInstance()->DestroyInstance();
 	ResourceFactory::GetInstance()->DestroyInstance();
 	ComponentFactory::GetInstance()->DestroyInstance();

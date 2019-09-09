@@ -26,3 +26,11 @@ struct CB_PS_COLOR
 	float green;
 	float blue;
 };
+
+struct CB_PS_OFFSET
+{
+	float xDetail;
+	float yDetail;
+	float xCount;
+	float yCount;
+};
